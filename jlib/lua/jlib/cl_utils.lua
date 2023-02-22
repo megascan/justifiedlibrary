@@ -24,7 +24,9 @@ local input_IsMouseDown = input.IsMouseDown
 local input_GetCursorPos = input.GetCursorPos
 local ScrW = ScrW
 local ScrH = ScrH
+local sound_Play = sound.Play
 local LocalPlayer = LocalPlayer
+local math_random = math.random
 local hook_Add = hook.Add
 local UTILS = {}
 UTILS.CircleCache = {}
@@ -95,8 +97,6 @@ function UTILS.DoClickAnimation(me, duration)
 end
 
 function UTILS.PerformDrag(s, me)
-    if vgui.GetHoveredPanel() ~= me and not s.hovering then return end
-
     if s.hovering == nil then
         s.hovering = false
     end
@@ -160,18 +160,18 @@ function UTILS.Click()
 end
 
 local xoffset = -15
-local hoffset = 85
+local hoffset = 110
 local iconSize = 64
 local unload_distance = 50000
 
-function UTILS.DrawNPCData(ent, text, icon, extra)
+function UTILS.DrawNPCData(ent, text, icon, extra, hoff)
     ent.alphaAnim = ent.alphaAnim or 0
     ent.alphaAnim = Lerp(FrameTime() * 15, ent.alphaAnim, LocalPlayer():GetPos():DistToSqr(ent:GetPos()) > unload_distance and 0 or 255)
     if ent.alphaAnim < 1 then return end
     local ang = ent:GetAngles()
     ang:RotateAroundAxis(ang:Right(), -90)
     ang:RotateAroundAxis(ang:Up(), 90)
-    cam_Start3D2D(ent:GetPos() + ent:GetAngles():Up() * (hoffset + 3 - ent.alphaAnim / 255 * 3), ang, .1)
+    cam_Start3D2D(ent:GetPos() + ent:GetAngles():Up() * ((hoff or hoffset) + 3 - ent.alphaAnim / 255 * 3), ang, .1)
     local font = jlib.fonts.Font(80, jlib.theme.font)
     local size_w, size_h = jlib.fonts.FontSurface(text, font)
     surface_SetDrawColor(ColorAlpha(jlib.theme.frame_secondary_color, ent.alphaAnim))
