@@ -121,3 +121,4 @@ jnet.promise = function(networkName, callback, rawBuffer, timeout)
 end
 
 _G["jnet"] = jnet
+hook.Call("jnet.Init")

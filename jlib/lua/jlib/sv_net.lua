@@ -3,8 +3,6 @@ jlib.net.registry = jlib.net.registry or {}
 jlib.net.ratelimiting = {}
 local registerNetworkChannel = util.AddNetworkString
 local Decompress = util.Decompress
-local Compress = util.Compress
-local TableToJSON = util.TableToJSON
 local registerNetworkChannel = registerNetworkChannel
 local bNetReadInt = net.ReadInt
 local bNetReadData = net.ReadData
@@ -15,13 +13,13 @@ local bNetStart = net.Start
 local bNetWriteString = net.WriteString
 local bNetWriteInt = net.WriteInt
 local bNetReadInt = net.ReadInt
-local bNetSendToServer = net.SendToServer
 local bNetSend = net.Send
 local bNetBroadcast = net.Broadcast
 local bNetReceive = net.Receive
 local bNetReadString = net.ReadString
 local bNetWriteBool = net.WriteBool
 local bNetReadBool = net.ReadBool
+local bNetReadFloat = net.ReadFloat
 local hAdd = hook.Add
 local clean = table.Empty
 local jnet = jlib.net
@@ -33,7 +31,7 @@ function jnet.msg(...)
 end
 
 jnet.ratelimit = function(networkName, ply, time)
-    local registry, key = jlib.net.registry[networkName], ply:SteamID64()
+    local key = ply:SteamID64()
     if not networkName then return false end
     jlib.net.ratelimiting[key] = jlib.net.ratelimiting[key] or {}
     jlib.net.ratelimiting[key][networkName] = jlib.net.ratelimiting[key][networkName] or 0
@@ -73,7 +71,7 @@ jnet.subscribe_promise = function(networkName, callback, ratelimitDelay, maxNetw
         local rawBuffer = bNetReadData(bufferSize)
         local bufferData = util.JSONToTable(Decompress(rawBuffer))
         local request_time = bNetReadInt(32)
-        print("received promise ", is_promise, promise_id, request_time)
+        print("received promise ", is_promise, promise_id, request_time, CurTime())
 
         callback(ply, bufferData, function(data)
             jnet.send(networkName, istable(data) and data or {data}, ply, true, promise_id)
@@ -99,8 +97,8 @@ jnet.subscribe = function(networkName, callback, ratelimitDelay, maxNetworkLengt
         local bufferSize = bNetReadInt(32)
         local rawBuffer = bNetReadData(bufferSize)
         local bufferData = util.JSONToTable(Decompress(rawBuffer))
-        local request_time = bNetReadInt(32)
-        print("request start time ", request_time)
+        local request_time = bNetReadFloat(32)
+        if CurTime() - request_time > 1 then return end
         callback(ply, bufferData, len - #networkName)
     end
 end
@@ -151,3 +149,4 @@ end)
 
 registerNetworkChannel("jNet.NetworkChannel")
 _G["jnet"] = jnet
+hook.Call("jnet.Init")
