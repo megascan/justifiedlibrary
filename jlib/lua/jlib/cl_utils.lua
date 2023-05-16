@@ -197,4 +197,28 @@ hook_Add("OnScreenSizeChanged", "jlib.utils.updateScreenResolution", function(ol
     UTILS.maxHeight = ScrH()
 end)
 
+local floor, format = math.floor, string.format
+
+function UTILS.FormatTime(time)
+    if not time then return end
+    local s = time % 60
+    time = floor(time / 60)
+    local m = time % 60
+    time = floor(time / 60)
+    local h = time % 24
+    time = floor(time / 24)
+    local d = time % 7
+    local w = floor(time / 7)
+
+    if w ~= 0 then
+        return format("%iw %id %ih %im", w, d, h, m)
+    elseif d ~= 0 then
+        return format("%id %ih %im", d, h, m)
+    elseif h ~= 0 then
+        return format("%ih %im", h, m)
+    end
+
+    return format("%im %is", m, s)
+end
+
 jlib.utils = UTILS
