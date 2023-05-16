@@ -125,6 +125,7 @@ do
         option.OnClick = function(s, w, h)
             self.selected = s:GetText()
             self.selectedid = s.id
+            self:OnSelect(s.id, s:GetText())
             self:OnClick()
         end
 
