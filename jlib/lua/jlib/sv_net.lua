@@ -112,9 +112,11 @@ end)
 --[[
 	Call this net when the player is actually loaded in properly
 --]]
-jnet.subscribe( "jlib_Net_HUDPaintLoad", function( ply, data )
-	hook.Run( "jlib.PlayerInitialized", ply )
-	ply.jlib_fully_loaded = true
+jnet.subscribe("jlib.OnClientFullyLoad", function(ply)
+    -- this function only gets called once, so lets not do a Xenin over here ;)
+    if ply.jlib_fully_loaded then return end
+    hook.Run("jlib.PlayerInitialized", ply)
+    ply.jlib_fully_loaded = true
 end, 1)
 
 registerNetworkChannel("jNet.NetworkChannel")
