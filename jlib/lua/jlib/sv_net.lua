@@ -152,6 +152,7 @@ end)
 --]]
 jnet.subscribe( "jlib_Net_HUDPaintLoad", function( ply, data )
 	hook.Run( "jlib.PlayerInitialized", ply )
+	ply.jlib_fully_loaded = true
 end, 1)
 
 registerNetworkChannel("jNet.NetworkChannel")
