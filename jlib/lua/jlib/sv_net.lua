@@ -46,39 +46,6 @@ jnet.ratelimit = function(networkName, ply, time)
     return within_limits
 end
 
-jnet.subscribe_promise = function(networkName, callback, ratelimitDelay, maxNetworkLength)
-    if not callback then
-        print("callback not found")
-
-        return
-    end
-
-    jlib.net.registry[networkName] = function(len, ply)
-        if maxNetworkLength and len > #networkName + maxNetworkLength then
-            return
-        elseif jnet.ratelimit(networkName, ply, ratelimitDelay) then
-            if not jnet.ratelimit(networkName .. "_out", ply, 1) then
-                local p_formatted = ply:Name() .. " [" .. ply:SteamID64() .. "]"
-                jnet.msg(p_formatted .. " hit promise ratelimit " .. networkName .. " only accepts requests every " .. ratelimitDelay)
-            end
-
-            return
-        end
-
-        local is_promise = bNetReadBool()
-        local promise_id = bNetReadString()
-        local bufferSize = bNetReadInt(32)
-        local rawBuffer = bNetReadData(bufferSize)
-        local bufferData = util.JSONToTable(Decompress(rawBuffer))
-        local request_time = bNetReadInt(32)
-        print("received promise ", is_promise, promise_id, request_time, CurTime())
-
-        callback(ply, bufferData, function(data)
-            jnet.send(networkName, istable(data) and data or {data}, ply, true, promise_id)
-        end)
-    end
-end
-
 jnet.subscribe = function(networkName, callback, ratelimitDelay, maxNetworkLength)
     if not callback then return end
 
@@ -103,7 +70,7 @@ jnet.subscribe = function(networkName, callback, ratelimitDelay, maxNetworkLengt
     end
 end
 
-jnet.send = function(networkName, rawBuffer, recepients, promise, promise_id)
+jnet.send = function(networkName, rawBuffer, recepients)
     local empty = false
 
     if not rawBuffer or not istable(rawBuffer) then
@@ -115,11 +82,6 @@ jnet.send = function(networkName, rawBuffer, recepients, promise, promise_id)
     local bufferSize = not empty and #processedBuffer
     bNetStart("jNet.NetworkChannel")
     bNetWriteString(networkName)
-    bNetWriteBool(promise or false)
-
-    if promise then
-        bNetWriteString(promise_id)
-    end
 
     if not empty then
         bNetWriteInt(bufferSize, 32)
