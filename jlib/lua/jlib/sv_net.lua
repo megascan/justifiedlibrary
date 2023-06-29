@@ -147,6 +147,13 @@ hAdd("PlayerDisconnected", "jNet.CleanupGarbage", function(ply)
     end
 end)
 
+--[[
+	Call this net when the player is actually loaded in properly
+--]]
+jnet.subscribe( "jlib_Net_HUDPaintLoad", function( ply, data )
+	hook.Run( "jlib.PlayerInitialized", ply )
+end, 1)
+
 registerNetworkChannel("jNet.NetworkChannel")
 _G["jnet"] = jnet
 hook.Call("jnet.Init")
