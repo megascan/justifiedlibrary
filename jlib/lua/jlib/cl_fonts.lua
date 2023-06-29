@@ -25,10 +25,10 @@ function FONTS.Font(font_size, font_family, font_weight)
     return id
 end
 
-function FONTS.FontSurface(t, fI)
-    surface_SetFont(fI)
+function FONTS.FontSurface(text, font)
+    surface_SetFont(font)
 
-    return surface_GetTextSize(t)
+    return surface_GetTextSize(text)
 end
 
 hook.Add("OnScreenSizeChanged", "jlib.fonts.ClearCacheOnResolutionChange", function()
