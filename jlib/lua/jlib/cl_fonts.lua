@@ -8,18 +8,25 @@ local surface_CreateFont = CLIENT and surface.CreateFont
 local surface_SetFont = CLIENT and surface.SetFont
 local surface_GetTextSize = CLIENT and surface.GetTextSize
 
-function FONTS.Font(font_size, font_family, font_weight)
+function FONTS.Font(font_size, font_family, font_weight, custom)
     font_weight = font_weight or 500
     local id = "jlib." .. font_size .. font_family .. font_weight
     if FONTS.Index[id] then return id end
 
-    surface_CreateFont(id, {
+    local font_data = {
         font = font_family,
         size = font_size,
         weight = font_weight or 500,
         antialias = true
-    })
+    }
 
+    if istable(custom) then
+        for key, value in pairs(custom) do
+            font_data[key] = value
+        end
+    end
+
+    surface_CreateFont(id, font_data)
     FONTS.Index[id] = true
 
     return id
