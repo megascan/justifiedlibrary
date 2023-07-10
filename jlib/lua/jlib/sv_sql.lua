@@ -1,5 +1,6 @@
 --[[
 	Thanks to Brickwall for inspiring this code and allowing me to use it.
+    - Craphead
 --]]
 jlib.SQL = jlib.SQL or {}
 jlib.SQL.Host = ""
