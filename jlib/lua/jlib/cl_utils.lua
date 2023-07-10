@@ -146,7 +146,7 @@ function UTILS.InteractSound(hover, pnl)
     end
 
     if hover and not pnl._JLIB_HELD then
-        --sound_Play("jlib/hover.wav", LocalPlayer():GetPos(), 75, math_random(130, 145), 1)
+        sound_Play("common/talk.wav", LocalPlayer():GetPos(), 75, 180, 1)
         pnl._JLIB_HELD = true
     end
 
@@ -156,9 +156,11 @@ function UTILS.InteractSound(hover, pnl)
 end
 
 function UTILS.Click()
-    surface_PlaySound("jlib/click4.wav")
+    sound_Play("UI/buttonclickrelease.wav", LocalPlayer():GetPos(), 75, 150, 1)
 end
 
+--surface_PlaySound("jlib/click4.wav")
+--
 local xoffset = -15
 local hoffset = 110
 local iconSize = 64
@@ -192,7 +194,7 @@ function UTILS.InRange(value, min, max)
     return value > min and value < max
 end
 
-hook_Add("OnScreenSizeChanged", "jlib.utils.updateScreenResolution", function(oldWidth, oldHeight)
+hook_Add("OnScreenSizeChanged", "jlib.utils.updateScreenResolution", function()
     UTILS.maxWidth = ScrW()
     UTILS.maxHeight = ScrH()
 end)
