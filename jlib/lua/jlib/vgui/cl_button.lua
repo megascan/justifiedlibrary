@@ -23,8 +23,6 @@ do
     end
 
     function PANEL:Paint(w, h)
-        -- self. = Color(30,30,30)
-        -- self.button_hover_color = Color(136, 33, 74)
         self.AnimAlpha = self:IsHovered() and Lerp(FrameTime() * 16, self.AnimAlpha, 255) or not self:IsHovered() and Lerp(FrameTime() * 16, self.AnimAlpha, 0)
         draw.RoundedBox(self.rounding, 0, 0, w, h, jlib.theme.button_base_color)
         draw.RoundedBox(self.rounding, 0, 0, w, h, ColorAlpha(jlib.theme.button_hover_color, self.AnimAlpha))
@@ -34,7 +32,7 @@ do
             local tWidth, tHeight = jlib.fonts.FontSurface(self:GetText(), self:GetFont())
             surface.SetDrawColor(self:GetTextColor())
             surface.SetMaterial(jlib.materials.Material(self.IconName))
-            surface.DrawTexturedRectRotated((w / 2) - tWidth / 2 - (self.Icon_Size / 2), h / 2, self.Icon_Size, self.Icon_Size, 0)
+            surface.DrawTexturedRectRotated(w / 2 - tWidth / 2 - self.Icon_Size / 2, h / 2, self.Icon_Size, self.Icon_Size, 0)
         end
     end
 
@@ -49,6 +47,7 @@ do
 
     function PANEL:DoClick()
         jlib.utils.DoClickAnimation(self, 1)
+        jlib.utils.Click()
 
         if self.OnClick then
             self.OnClick(self)
