@@ -125,7 +125,7 @@ function UTILS.PerformDrag(s, me)
     end
 end
 
-function UTILS.Scale(value) -- Better scaling function using a actual good resolution instead of something your grandma uses (680x640) 🙂
+function UTILS.Scale(value) -- Better scaling function using a actual good resolution instead of something your grandma uses (680x340) 🙂
     return math_max(value * (ScrH() / 1080), 1)
 end
 
