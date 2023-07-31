@@ -27,6 +27,7 @@ local ScrH = ScrH
 local sound_Play = sound.Play
 local LocalPlayer = LocalPlayer
 local math_random = math.random
+local math_max = math.max
 local hook_Add = hook.Add
 local UTILS = {}
 UTILS.CircleCache = {}
@@ -122,6 +123,10 @@ function UTILS.PerformDrag(s, me)
     if not input_IsMouseDown(MOUSE_LEFT) then
         s.hovering = false
     end
+end
+
+function UTILS.Scale(value) -- Better scaling function using a actual good resolution instead of something your grandma uses (680x640) 🙂
+    return math_max(value * (ScrH() / 1080), 1)
 end
 
 function UTILS.ScaleW(amt)
