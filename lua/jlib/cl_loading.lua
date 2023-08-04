@@ -4,6 +4,7 @@
 hook.Add("HUDPaint", "jlib.OnClientFullyLoad", function()
 	if IsValid(LocalPlayer()) then
 		jnet.send("jlib.Authenticate", {})
+		hook.Run("jlib.Authenticate")
 		hook.Remove("HUDPaint", "jlib.OnClientFullyLoad")
 	end
 end)
