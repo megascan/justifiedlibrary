@@ -110,7 +110,7 @@ end)
 --[[
 	Call this net when the player is actually loaded in properly
 --]]
-jnet.subscribe("jlib.OnClientFullyLoad", function(ply)
+jnet.subscribe("jlib.Authenticate", function(ply)
     -- this function only gets called once, so lets not do a Xenin over here ;)
     if ply.jlib_fully_loaded then return end
     hook.Run("jlib.PlayerInitialized", ply)
