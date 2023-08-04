@@ -3,6 +3,7 @@
 --  Purpose:    Allows creation of materials live using the HTTP lib.
 --  Date:       07/08/2021 - 11:00 AM
 local MATERIALS = {}
+MATERIALS.queue = {}
 local Material = Material
 local string = string
 local file = file
@@ -33,17 +34,37 @@ function MATERIALS.CreateMaterial(matName, addOn, matUrl, matArgs)
         end
     end
 
-    http.Fetch(matUrl, function(b, _, _, _)
-        file.Write(filename, b)
-        MATERIALS.CreatedMaterialCache[matName] = Material("data/" .. filename, "smooth")
-        jlib.msg("[Materials] Created new WebMaterial Instace '" .. matName .. "'")
-    end)
+    table.insert(MATERIALS.queue, {matName, addOn, matUrl, matArgs, filename})
+
+    do
+        local canContinue = true
+        timer.Create("JustifiedLibrary.ProcessMaterialQueue", 0.1, 0, function()
+            if table.Count(MATERIALS.queue) == 0 then timer.Remove("JustifiedLibrary.ProcessMaterialQueue") return end
+            if not canContinue then return end
+            local current = MATERIALS.queue[#MATERIALS.queue]
+            canContinue = false
+            local matName, addOn, matUrl, matArgs, filename = current[1], current[2], current[3], current[4], current[5]
+            -- print("processing ",unpack(current))
+            
+            http.Fetch(matUrl, function(b, _, _, _)
+                file.Write(filename, b)
+                MATERIALS.CreatedMaterialCache[matName] = Material("data/" .. filename, "smooth")
+                jlib.msg("[Materials] Downloaded Material '" .. matName .. "'")
+                table.remove(MATERIALS.queue)
+                canContinue = true
+            end, function()
+                jlib.msg("[Materials] Failed to Download Material '" .. matName .. "'")
+                table.remove(MATERIALS.queue)
+                canContinue = true
+            end)
+        end)
+    end
 end
 
 local function requestResources()
     timer.Simple(0, function()
         jlib.msg("[Materials] Downloading Server Resources...")
-        hook.Call("jlib.downloadResources")
+        hook.Run("jlib.downloadResources")
     end)
 end
 
@@ -56,7 +77,7 @@ local function clearResources()
     end
 end
 
-hook.Add("InitPostEntity", "jlib.Materials.Stub", function()
+hook.Add("jlib.Authenticate", "jlib.Materials.Stub", function()
     timer.Simple(0, function()
         requestResources()
     end)
