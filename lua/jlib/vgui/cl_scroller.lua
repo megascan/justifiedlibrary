@@ -15,11 +15,13 @@ do
         self.snappy = false
 
         function sbar:Paint(w, h)
-            draw.RoundedBox(w / 2, 0, 0, w, h, jlib.theme.scroller_base_color)
+            surface.SetDrawColor(jlib.theme.scroller_base_color)
+            surface.DrawRect(0, 0, w, h)
         end
 
         function sbar.btnGrip:Paint(w, h)
-            draw.RoundedBox(w / 2, 2, 5, w - 4, h - 10, jlib.theme.scroller_grip_color)
+            surface.SetDrawColor(jlib.theme.scroller_grip_color)
+            surface.DrawRect(0, 0, w, h)
         end
 
         self.bar = sbar

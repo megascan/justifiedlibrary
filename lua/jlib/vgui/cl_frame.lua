@@ -29,7 +29,7 @@ do
         self.header.title = vgui.Create("DLabel", self.header)
         self.header.title:Dock(LEFT)
         self.header.title:DockMargin(self.rounding + ScreenScale(1), 0, 0, 0)
-        self.header.title:SetFont(jlib.fonts.Font(self.header:GetTall() * 0.8, jlib.theme.font, 200))
+        self.header.title:SetFont(jlib.fonts.Font(self.header:GetTall() * 0.8, jlib.theme.font_bold, 200))
         self.header.title:SetTextColor(jlib.theme.frame_title_color)
         self.header.title:SetText("JLIB Frame")
         self.header.title:SizeToContents()
@@ -113,6 +113,78 @@ do
     end
 
     vgui.Register("jlib.Frame", PANEL, "EditablePanel")
+end
+
+do
+    local PANEL = {}
+
+    function PANEL:Init()
+        if IsValid(EvolutionGangs.Promt) then
+            EvolutionGangs.Promt:Remove()
+        end
+
+        self.start = SysTime()
+        self:SetTitle("Promt")
+        self.movable = false
+        self:SetSize(jlib.utils.ScaleH(150), jlib.utils.ScaleH(32))
+        EvolutionGangs.Promt = self
+        self.text = self:Add("DLabel")
+        self.text:SetFont(jlib.fonts.Font(jlib.utils.ScaleH(8), jlib.theme.font))
+        self.text:Dock(TOP)
+        self.text:SetContentAlignment(8)
+        self.actions = self:Add("DPanel")
+        self.actions:Dock(FILL)
+        self.actions:SetPaintBackground(false)
+        self.actions.confirm = vgui.Create("jlib.Button", self.actions)
+        self.actions.confirm:Dock(RIGHT)
+        self.actions.confirm:DockMargin(5, 5, 5, 5)
+        self.actions.confirm:SetText("Confirm")
+
+        self.actions.confirm.DoClick = function(s)
+            jlib.utils.Click()
+            self:OnPromtSubmit(s:GetText())
+            self:Close()
+        end
+
+        self.actions.deny = vgui.Create("jlib.Button", self.actions)
+        self.actions.deny:Dock(FILL)
+        self.actions.deny:DockMargin(5, 5, 0, 5)
+        self.actions.deny:SetText("Cancel")
+
+        self.actions.deny.DoClick = function(s)
+            jlib.utils.Click()
+            self:OnPromtSubmit(s:GetText())
+            self:Close()
+        end
+
+        self.header.closeBtn:Remove()
+        self:Center()
+        local op = self.Paint
+
+        self.Paint = function(s, w, h)
+            Derma_DrawBackgroundBlur(self, self.start)
+            op(s, w, h)
+        end
+
+        self:MakePopup()
+    end
+
+    function PANEL:PerformLayout(w, h)
+        self.actions.confirm:SetWide(w / 2 - 10)
+    end
+
+    function PANEL:OnPromtSubmit(response)
+    end
+
+    function PANEL:SetText(txt)
+        self.text:SetText(txt)
+        self.text:SizeToContents()
+        local w, h = jlib.fonts.FontSurface(txt, self.text:GetFont())
+        self:SetWide(w * 1.1)
+        self:Center()
+    end
+
+    vgui.Register("jlib.ButtonPromt", PANEL, "jlib.Frame")
 end
 
 hook.Add("jlib.downloadResources", "jlib.frame.resources", function()

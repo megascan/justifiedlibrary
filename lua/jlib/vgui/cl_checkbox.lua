@@ -28,9 +28,11 @@ do
         draw_RoundedBox(self.rounding, 0, 0, w, h, jlib.theme.checkbox_background)
         jlib.utils.ClickingAnimationHandle(self, math_max(w, h), jlib.theme.checkbox_clicked)
         self.scalem = Lerp(FrameTime() * 10, self.scalem, self:GetChecked() and 1 or 0)
+        surface.SetDrawColor(jlib.theme.scroller_grip_color)
+        surface.DrawOutlinedRect(0, 0, w, h, 1)
         surface_SetDrawColor(jlib.theme.accent)
         surface_SetMaterial(jlib.materials.Material("checkbox-check"))
-        surface_DrawTexturedRectRotated(w / 2, h / 2, (w * 0.8) * self.scalem, (h * 0.8) * self.scalem, 0)
+        surface_DrawTexturedRectRotated(w / 2, h / 2, w * 0.8 * self.scalem, h * 0.8 * self.scalem, 0)
     end
 
     function PANEL:DoClick()

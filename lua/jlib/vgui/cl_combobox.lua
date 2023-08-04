@@ -42,6 +42,8 @@ do
 
         self.expanded_panel.Paint = function(s, w, h)
             draw_RoundedBox(self.rounding, 0, 0, w, h, jlib.theme.combobox_base_color)
+            surface.SetDrawColor(jlib.theme.scroller_grip_color)
+            surface.DrawOutlinedRect(0, -1, w, h + 1, 1)
         end
 
         self.expanded_panel.Think = function(s)
@@ -75,13 +77,15 @@ do
 
         if self.invoke_error_text and self.invoke_time > CurTime() then
             draw.RoundedBox(self.rounding, 0, h - 2, w, 2, jlib.theme.error)
-            draw_SimpleText(self.invoke_error_text, jlib.fonts.Font(h * 0.8, jlib.theme.font, 500), h / 2, h / 2, gray, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+            draw_SimpleText(self.invoke_error_text, self:GetFont(), h / 2, h / 2, gray, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
             return
         end
 
+        surface.SetDrawColor(jlib.theme.scroller_grip_color)
+        surface.DrawOutlinedRect(0, 0, w, h, 1)
         jlib.utils.ClickingAnimationHandle(self, math_max(w, h), jlib.theme.combobox_click_color)
-        draw_SimpleText(self.selected and self.selected or self:GetPlaceholder() or "", jlib.fonts.Font(h * 0.8, jlib.theme.font, 500), h / 2, h / 2, gray, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+        draw_SimpleText(self.selected and self.selected or self:GetPlaceholder() or "", self:GetFont(), h / 2, h / 2, gray, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
         surface_SetDrawColor(gray)
         surface_SetMaterial(jlib.materials.Material("combo_down"))
         surface_DrawTexturedRectRotated(w - h / 2, h / 2, h * 0.8, h * 0.8, self.rotanim)
@@ -113,11 +117,19 @@ do
         return self.selected
     end
 
+    function PANEL:SelectFirst()
+        local first = self.items[1]
+        if not first then return end
+        self.selected = first:GetText()
+        self.selectedid = first.id
+    end
+
     function PANEL:AddChoice(text)
         local option = self.expanded_panel.scroller:Add("jlib.Button")
         option:Dock(TOP)
-        option:DockMargin(2, 2, 2, 0)
+        option:DockMargin(1, 1, 1, 1)
         option:SetTall(self.item_size)
+        option:SetFont(self:GetFont())
         option:SetText(text)
         option.id = table.insert(self.items, option)
         option.halpha = 0
@@ -129,8 +141,6 @@ do
             self:OnClick()
         end
 
-        option:SetFontScale(option:GetTall() * 0.8)
-
         option.Paint = function(s, w, h)
             if s:IsHovered() then
                 s.halpha = Lerp(FrameTime() * 10, s.halpha, 255)
@@ -138,8 +148,6 @@ do
                 s.halpha = Lerp(FrameTime() * 10, s.halpha, 0)
             end
 
-            surface_SetDrawColor(jlib.theme.frame_base_color)
-            surface_DrawRect(0, 0, w, h)
             surface_SetDrawColor(ColorAlpha(jlib.theme.button_hover_color, s.halpha))
             surface_DrawRect(0, 0, w, h)
         end
@@ -164,7 +172,7 @@ do
             self.expanded_panel:SetPos(x, y + self:GetTall() - 2)
             self.expanded_panel:SetWide(self:GetWide())
             self.expanded_panel:MoveToFront()
-            local height = math_min((self.item_size + 2) * #self.expanded_panel.scroller:GetCanvas():GetChildren(), ScrH() * 0.8 - y) + 2
+            local height = math_min(self.item_size * #self.expanded_panel.scroller:GetCanvas():GetChildren(), ScrH() * 0.8 - y) + 2
 
             self.expanded_panel:SizeTo(self:GetWide(), height, 0.1, 0, -1, function()
                 self.canClickAgain = true

@@ -1,7 +1,10 @@
 jlib = jlib or {}
 local THEME = {}
-THEME.font = "Montserrat"
-THEME.accent = Color(200, 47, 104)
+THEME.font = "Tactic Round Med"
+THEME.font_bold = "Tactic Round Med"
+THEME.accent = Color(47, 113, 200)
+THEME.stamina = Color(216, 207, 88)
+THEME.orange = Color(255, 125, 0)
 --[[
     Frame
 ]]
@@ -17,6 +20,7 @@ THEME.frame_title_secondarycolor = Color(192, 192, 192)
     Text Color
 ]]
 THEME.text_color = Color(220, 220, 220)
+THEME.text_color_gray = Color(179, 179, 179)
 --[[
     TextEntry
 ]]
@@ -36,14 +40,19 @@ THEME.button_text_color = Color(220, 220, 220)
     Scroller
 ]]
 THEME.scroller_base_color = Color(20, 20, 23)
-THEME.scroller_grip_color = Color(26, 26, 30)
+THEME.scroller_grip_color = Color(47, 47, 54)
 --[[
     ComboBox
 ]]
-THEME.combobox_base_color = Color(22, 22, 25)
+THEME.combobox_base_color = Color(30, 30, 33)
 THEME.combobox_click_color = Color(35, 35, 38)
 THEME.error = Color(184, 64, 64)
 THEME.success = Color(64, 184, 144)
+--[[
+    Checkbox
+]]
+THEME.checkbox_background = Color(26, 26, 29)
+THEME.checkbox_clicked = Color(56, 56, 61)
 --[[
     Loading
 ]]

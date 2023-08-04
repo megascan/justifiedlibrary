@@ -36,8 +36,10 @@ do
             return
         end
 
+        surface.SetDrawColor(jlib.theme.scroller_grip_color)
+        surface.DrawOutlinedRect(0, 0, w, h, 1)
         jlib.utils.ClickingAnimationHandle(self, math.max(w, h), jlib.theme.textentry_cursor_color)
-        self:DrawTextEntryText(jlib.theme.textentry_text_color, jlib.theme.textentry_cursor_color, jlib.theme.textentry_text_color)
+        self:DrawTextEntryText(self:GetTextColor() or jlib.theme.textentry_text_color, jlib.theme.textentry_cursor_color, jlib.theme.textentry_text_color)
         local placeholder = self:GetPlaceholderText()
 
         if placeholder and placeholder ~= "" and self:GetText() == "" then
