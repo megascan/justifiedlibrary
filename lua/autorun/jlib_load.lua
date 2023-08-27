@@ -55,7 +55,7 @@ function jlib.search(dir, instance, filetype)
 
         if fs and type(fs) == "table" then
             for _, f in ipairs(fs) do
-                if string.match(totalfiles, "!") then continue end
+                if string.match(f, "!") then continue end
                 table.insert(totalfiles, f)
             end
         end
