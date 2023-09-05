@@ -15,10 +15,7 @@ do
         self.header:Dock(TOP)
         self.header:SetTall(jlib.utils.ScaleH(8))
         self.draw_blur = false
-
-        self.header.Paint = function(s, w, h)
-            draw.RoundedBoxEx(self.rounding, 0, 0, w, h, jlib.theme.frame_header_color, true, true, false, false)
-        end
+        self.header.bg_color = jlib.theme.frame_header_color
 
         self.header.Think = function(s)
             if self.movable then
