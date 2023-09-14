@@ -1,3 +1,4 @@
+jlib = jlib or {}
 jlib.net = jlib.net or {}
 jlib.net.registry = jlib.net.registry or {}
 jlib.net.ratelimiting = {}
@@ -112,7 +113,12 @@ end)
 --]]
 jnet.subscribe("jlib.Authenticate", function(ply)
     -- this function only gets called once, so lets not do a Xenin over here ;)
-    if ply.jlib_fully_loaded then return end
+    if ply.jlib_fully_loaded then
+        print("already authed")
+
+        return
+    end
+
     hook.Run("jlib.PlayerInitialized", ply)
     ply.jlib_fully_loaded = true
 end, 1)

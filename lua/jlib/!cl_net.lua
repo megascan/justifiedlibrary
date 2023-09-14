@@ -14,6 +14,7 @@ local istable = istable
 local Decompress = util.Decompress
 local bNetWriteFloat = net.WriteFloat
 local signature = CurTime
+jlib = jlib or {}
 jlib.net = jlib.net or {}
 jlib.net.registry = jlib.net.registry or {}
 local util = util
