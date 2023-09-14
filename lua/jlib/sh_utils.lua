@@ -55,6 +55,24 @@ function UTILS.AdvanceColor(rv1, rv2, rv3)
     return Color(p, y, r)
 end
 
+local lastid = 0
+
+function UTILS:SetupSlowThink(panel)
+    lastid = lastid + 1
+    local uniqueid = "jlib.SlowThinkHandler.id" .. lastid
+    panel:SlowThink()
+
+    timer.Create(uniqueid, 0, 0, function()
+        if not IsValid(panel) then
+            timer.Remove(uniqueid)
+
+            return
+        end
+
+        panel:SlowThink()
+    end)
+end
+
 if CLIENT then
     function UTILS.Circle(x, y, r)
         local circle = {}
@@ -160,8 +178,6 @@ if CLIENT then
         sound_Play("UI/buttonclickrelease.wav", LocalPlayer():GetPos(), 75, 150, 1)
     end
 
-    --surface_PlaySound("jlib/click4.wav")
-    --
     local xoffset = -15
     local hoffset = 110
     local iconSize = 64
