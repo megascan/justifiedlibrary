@@ -89,6 +89,11 @@ function jlib.load_dir(dir)
     for _, file in ipairs(files) do
         local f_ = dir .. "/" .. file
 
+        if string_find(f_, "!") then
+            jlib.msg("Skipping disabled " .. f_)
+            continue
+        end
+
         if string_find(file, "sv_") or string_find(file, "sh_") then
             jlib.msg("Running [SV] '" .. f_ .. "'")
             include(f_)
