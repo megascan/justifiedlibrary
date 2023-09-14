@@ -1,31 +1,25 @@
 do
     local PANEL = {}
 
-    function PANEL:Init()
+    function PANEL:ShowLoading()
+        self:SetVisible(true)
     end
 
-    function PANEL:Show()
-        self:SetVisible(true)
-        self:SetAlpha(0)
-        self:AlphaTo(255, 0.1, 0)
-    end
-
-    function PANEL:Hide()
-        self:SetAlpha(255)
-        self:SetVisible(true)
-
-        self:AlphaTo(255, 0.1, 0, function()
-            self:SetVisible(false)
-        end)
+    function PANEL:HideLoading()
+        self:SetVisible(false)
     end
 
     function PANEL:Paint(w, h)
+        local smaller = math.min(w, h)
+        surface.SetDrawColor(ColorAlpha(jlib.theme.frame_base_color, 200))
+        surface.DrawRect(0, 0, w, h)
         draw.NoTexture()
         surface.SetDrawColor(jlib.theme.loading_background)
-        jlib.draw_extras.DrawRing(w / 2, h / 2, jlib.utils.ScaleW(25), jlib.utils.ScaleW(4), 0, 360)
+        jlib.draw_extras.DrawRing(w / 2, h / 2, smaller * 0.2 + jlib.utils.ScaleW(1), jlib.utils.ScaleW(4), 0, 360)
         surface.SetDrawColor(jlib.theme.loading_inside)
         local animtime = CurTime() * 255
-        jlib.draw_extras.DrawRing(w / 2, h / 2, jlib.utils.ScaleW(24), jlib.utils.ScaleW(2), animtime, animtime + 80)
+        jlib.draw_extras.DrawRing(w / 2, h / 2, smaller * 0.2, jlib.utils.ScaleW(2), animtime, animtime + 80)
+        self:MoveToFront()
     end
 
     vgui.Register("jlib.Loading", PANEL, "EditablePanel")
