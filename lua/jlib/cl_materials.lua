@@ -38,14 +38,20 @@ function MATERIALS.CreateMaterial(matName, addOn, matUrl, matArgs)
 
     do
         local canContinue = true
-        timer.Create("JustifiedLibrary.ProcessMaterialQueue", 0.1, 0, function()
-            if table.Count(MATERIALS.queue) == 0 then timer.Remove("JustifiedLibrary.ProcessMaterialQueue") return end
+
+        timer.Create("JustifiedLibrary.ProcessMaterialQueue", 0, 0, function()
+            if table.Count(MATERIALS.queue) == 0 then
+                timer.Remove("JustifiedLibrary.ProcessMaterialQueue")
+
+                return
+            end
+
             if not canContinue then return end
             local current = MATERIALS.queue[#MATERIALS.queue]
             canContinue = false
             local matName, addOn, matUrl, matArgs, filename = current[1], current[2], current[3], current[4], current[5]
+
             -- print("processing ",unpack(current))
-            
             http.Fetch(matUrl, function(b, _, _, _)
                 file.Write(filename, b)
                 MATERIALS.CreatedMaterialCache[matName] = Material("data/" .. filename, "smooth")
@@ -76,6 +82,11 @@ local function clearResources()
         file.Delete(f)
     end
 end
+
+hook.Add("HUDPaint", "jlib.Materials.HUD", function()
+    if #MATERIALS.queue == 0 then return end
+    draw.SimpleText(string.format("Downloading %s Resources...", #MATERIALS.queue), jlib.fonts.Font(jlib.utils.ScaleH(8), jlib.theme.font), 15, 15, jlib.theme.text_color_gray, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+end)
 
 hook.Add("jlib.Authenticate", "jlib.Materials.Stub", function()
     timer.Simple(0, function()
