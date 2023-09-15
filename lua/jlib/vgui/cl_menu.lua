@@ -57,7 +57,7 @@ do
         self:MakePopup()
     end
 
-    vgui_Register("jlib.Menu", PANEL, "jlib.Panel")
+    vgui.Register("jlib.Menu", PANEL, "jlib.Panel")
 
     function jlib.Menu()
         return vgui.Create("jlib.Menu")
