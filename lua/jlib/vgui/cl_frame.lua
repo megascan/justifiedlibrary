@@ -63,6 +63,14 @@ do
         self:AlphaTo(255, 0.1, 0, nil)
     end
 
+    function PANEL:SetDraggable(draggable)
+        self.movable = draggable
+    end
+
+    function PANEL:ShowCloseButton(show)
+        self.header.closeBtn:SetVisible(show)
+    end
+
     function PANEL:Close()
         if not self.closing then
             self:AlphaTo(0, 0.1, 0, function()
