@@ -20,7 +20,6 @@ local bNetReceive = net.Receive
 local bNetReadString = net.ReadString
 local bNetReadFloat = net.ReadFloat
 local hAdd = hook.Add
-local clean = table.Empty
 local jnet = jlib.net
 jnet.msgqueue = {}
 jnet.lastprint = {}
@@ -104,7 +103,7 @@ end)
 
 hAdd("PlayerDisconnected", "jNet.CleanupGarbage", function(ply)
     if jlib.net.ratelimiting[ply:SteamID64()] then
-        clean(jlib.net.ratelimiting[ply:SteamID64()])
+        jlib.net.ratelimiting[ply:SteamID64()] = nil
     end
 end)
 
