@@ -1,10 +1,10 @@
 --[[
 	This is a method of ensuring that the player is loaded in, so we can network stuff to them (PlayerInitialSpawn is unreliable)
 --]]
-hook.Add("HUDPaint", "jlib.OnClientFullyLoad", function()
-	if IsValid(LocalPlayer()) then
+timer.Create("jlib.InitializePlayer", 1, 0, function()
+	if IsValid(LocalPlayer()) and istable(jnet) then
 		jnet.send("jlib.Authenticate", {})
 		hook.Run("jlib.Authenticate")
-		hook.Remove("HUDPaint", "jlib.OnClientFullyLoad")
+		timer.Remove("jlib.InitializePlayer")
 	end
 end)
