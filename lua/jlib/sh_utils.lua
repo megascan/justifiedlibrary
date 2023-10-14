@@ -182,6 +182,7 @@ if CLIENT then
     local hoffset = 110
     local iconSize = 64
     local unload_distance = 50000
+    local color_black = Color(0, 0, 0)
 
     function UTILS.DrawNPCData(ent, text, icon, extra, hoff)
         ent.alphaAnim = ent.alphaAnim or 0
@@ -195,7 +196,7 @@ if CLIENT then
         local size_w, size_h = jlib.fonts.FontSurface(text, font)
         surface_SetDrawColor(ColorAlpha(jlib.theme.frame_secondary_color, ent.alphaAnim))
         draw_NoTexture()
-        draw_SimpleText(text, font, xoffset + -size_w / 2 + 42, 0, ColorAlpha(jlib.theme.text_color, ent.alphaAnim), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+        draw.SimpleTextOutlined(text, font, xoffset + -size_w / 2 + 42, 0, ColorAlpha(jlib.theme.text_color, ent.alphaAnim), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, ColorAlpha(color_black, ent.alphaAnim))
         surface_SetDrawColor(ColorAlpha(jlib.theme.text_color, ent.alphaAnim))
         surface_SetMaterial(jlib.materials.Material(icon))
         surface_DrawTexturedRectRotated(xoffset + -size_w / 2, size_h / 2 - 3, iconSize, iconSize, 0)
