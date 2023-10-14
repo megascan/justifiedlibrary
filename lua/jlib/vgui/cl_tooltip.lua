@@ -4,6 +4,10 @@ local vgui_Register = vgui.Register
 do
     local PANEL = {}
 
+    function PANEL:GetDeleteSelf()
+        return true
+    end
+
     function PANEL:Init()
         RegisterDermaMenuForClose(self)
     end
