@@ -122,6 +122,7 @@ do
         if not first then return end
         self.selected = first:GetText()
         self.selectedid = first.id
+        self:OnSelect(self.selectedid, self.selected)
     end
 
     function PANEL:AddChoice(text)
