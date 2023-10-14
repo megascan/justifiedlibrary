@@ -22,11 +22,26 @@ do
         local option = self.scroll:Add("jlib.Button")
         option:Dock(TOP)
         option:SetText(text)
-        option.DoClick = exec
+
+        option.DoClick = function()
+            exec()
+        end
+
         option:SetContentAlignment(5)
         option:SizeToContents()
         option:SetTextColor(jlib.theme.text_color)
+        option.menu_option = true
         self:SetTall(self:GetTall() + option:GetTall())
+        local oldpaint = option.Paint
+
+        option.Paint = function(s, w, h)
+            oldpaint(s, w, h)
+
+            if s:IsHovered() then
+                jlib.last_hovered_menu_exec = exec
+                jlib.last_hovered_menu_time = CurTime()
+            end
+        end
 
         if option:GetWide() > self.widest then
             self.widest = option:GetWide() + jlib.utils.ScaleH(5)
@@ -46,11 +61,11 @@ do
         return spacer
     end
 
-    function PANEL:OnFocusChanged(gained)
-        -- Close the menu if we lose focus
-        if not gained then
-            self:Remove()
-        end
+    function PANEL:OnRemove()
+        local hov = vgui.GetHoveredPanel()
+        if not IsValid(hov) then return end
+        if not hov.menu_option then return end
+        hov:DoClick()
     end
 
     function PANEL:Open()
