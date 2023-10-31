@@ -23,8 +23,8 @@ end
 jlib.SQL.DB:connect()
 
 -- Here's our MySQL query function
-function jlib.SQL.Query(query, func, singleRow)
-    local query = jlib.SQL.DB:query(query)
+function jlib.SQL.Query(queryr, func, singleRow)
+    local query = jlib.SQL.DB:query(queryr)
 
     if func then
         function query:onSuccess(data)
@@ -37,7 +37,9 @@ function jlib.SQL.Query(query, func, singleRow)
     end
 
     function query:onError(err)
-        print("[jlib MySQL] An error occured while executing the query: " .. err)
+        local stack = debug.traceback()
+        print("[jlib MySQL] An error occured while executing the query: " .. err .. "\nStack: " .. stack)
+        print(queryr)
     end
 
     query:start()
