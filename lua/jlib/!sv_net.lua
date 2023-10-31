@@ -4,7 +4,6 @@ jlib.net.registry = jlib.net.registry or {}
 jlib.net.ratelimiting = {}
 local registerNetworkChannel = util.AddNetworkString
 local Decompress = util.Decompress
-local registerNetworkChannel = registerNetworkChannel
 local bNetReadInt = net.ReadInt
 local bNetReadData = net.ReadData
 local bNetWriteData = net.WriteData
