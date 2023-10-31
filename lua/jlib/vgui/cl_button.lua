@@ -21,8 +21,8 @@ do
         self.styles = {
             [1] = function(s, w, h)
                 self.AnimAlpha = self:IsHovered() and Lerp(FrameTime() * 16, self.AnimAlpha, 255) or not self:IsHovered() and Lerp(FrameTime() * 16, self.AnimAlpha, 0)
-                draw.RoundedBoxEx(self.rounding, 0, 0, w, h, jlib.theme.button_base_color, true, true, true, true)
-                draw.RoundedBoxEx(self.rounding, 0, 0, w, h, ColorAlpha(jlib.theme.button_hover_color, self.AnimAlpha), true, true, true, true)
+                draw.RoundedBoxEx(self.rounding, 0, 0, w, h, s.bg_color or jlib.theme.button_base_color, true, true, true, true)
+                draw.RoundedBoxEx(self.rounding, 0, 0, w, h, ColorAlpha(s.bg_color or jlib.theme.button_hover_color, self.AnimAlpha), true, true, true, true)
                 jlib.utils.ClickingAnimationHandle(self, math.max(w, h), jlib.theme.button_click_color)
 
                 if self.IconName then
