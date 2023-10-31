@@ -21,7 +21,9 @@ do
     function PANEL:AddOption(text, exec)
         local option = self.scroll:Add("jlib.Button")
         option:Dock(TOP)
+        option:SetFont(jlib.fonts.Font(jlib.utils.ScaleH(8), jlib.theme.font))
         option:SetText(text)
+        option.style = 3
 
         option.DoClick = function()
             exec()
@@ -29,6 +31,7 @@ do
 
         option:SetContentAlignment(5)
         option:SizeToContents()
+        option:SetSize(option:GetWide() + jlib.utils.ScaleH(5), option:GetTall() + jlib.utils.ScaleH(2))
         option:SetTextColor(jlib.theme.text_color)
         option.menu_option = true
         self:SetTall(self:GetTall() + option:GetTall())
