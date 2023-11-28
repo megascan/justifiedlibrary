@@ -73,6 +73,18 @@ function UTILS:SetupSlowThink(panel)
     end)
 end
 
+if SERVER then
+    function UTILS:SFX(ply, sound)
+        jnet.send("JustifiedLibrary.PlayAudio", {
+            sound = sound
+        }, ply)
+    end
+else
+    jnet.subscribe("JustifiedLibrary.PlayAudio", function(buffer)
+        surface.PlaySound(buffer.sound)
+    end)
+end
+
 if CLIENT then
     function UTILS.Circle(x, y, r)
         local circle = {}
@@ -176,6 +188,10 @@ if CLIENT then
 
     function UTILS.Click()
         sound_Play("UI/buttonclickrelease.wav", LocalPlayer():GetPos(), 75, 150, 1)
+    end
+
+    function UTILS.Hover()
+        sound_Play("common/talk.wav", LocalPlayer():GetPos(), 75, 180, 1)
     end
 
     local xoffset = -15
