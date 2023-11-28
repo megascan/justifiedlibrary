@@ -38,3 +38,34 @@ do
 
     vgui.Register("jlib.Scroller", PANEL, "DScrollPanel")
 end
+
+do
+    local PANEL = {}
+
+    function PANEL:Init()
+        self.snappy = false
+
+        function self.btnLeft:Paint(w, h)
+            surface.SetDrawColor(jlib.theme.scroller_grip_color)
+            surface.DrawRect(0, 0, w, h)
+        end
+
+        function self.btnRight:Paint(w, h)
+            surface.SetDrawColor(jlib.theme.scroller_grip_color)
+            surface.DrawRect(0, 0, w, h)
+        end
+    end
+
+    -- function PANEL:Paint(w, h)
+    --     surface.SetDrawColor(jlib.theme.scroller_base_color)
+    --     surface.DrawRect(0, 0, w, h)
+    -- end
+    function PANEL:Add(class)
+        local pnl = vgui.Create(class)
+        self:AddPanel(pnl)
+
+        return pnl
+    end
+
+    vgui.Register("jlib.HScroller", PANEL, "DHorizontalScroller")
+end
