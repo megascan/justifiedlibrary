@@ -113,6 +113,12 @@ do
         return self.rounding
     end
 
+    function PANEL:OnSizeChanged(width, height)
+        if IsValid(self.inner) then
+            self.inner:SetSize(width, height)
+        end
+    end
+
     function PANEL:Add(element)
         return vgui.Create(element, self.inner)
     end
